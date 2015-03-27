@@ -17,6 +17,7 @@ public class SimpleTest {
 
 		g = new Generator("WEATHER","input.aiml");
 		System.out.println(g);
+		System.out.println(g.getSimplifiedView());
 
 
 	}
