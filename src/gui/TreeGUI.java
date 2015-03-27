@@ -1,3 +1,4 @@
+package gui;
 
 import java.awt.BorderLayout;
 import java.io.BufferedReader;
@@ -15,6 +16,8 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import fc.Node;
 
 public class TreeGUI extends JFrame
 {
@@ -70,7 +73,7 @@ public class TreeGUI extends JFrame
     
     private void addUnder(DefaultMutableTreeNode root, Node t){
     	//create the child nodes
-        for (Node son: t.sons){
+        for (Node son: t.getSons()){
             DefaultMutableTreeNode guiNode = new DefaultMutableTreeNode(son.toString());
             root.add(guiNode);
             addUnder(guiNode,son);

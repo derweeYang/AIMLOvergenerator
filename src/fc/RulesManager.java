@@ -1,12 +1,32 @@
+package fc;
 
-public class Generator {
+/**
+ * A Generator is linked to a certain Tree via the root Node
+ * It can be called to apply rules to the tree it is linked to.
+ * 
+ * @author Laurent Fite
+ *
+ */
+public class RulesManager {
 
+	/**
+	 * The tree it is linked to. All rules will apply to this tree
+	 */
 	Node root;
 	
-	public Generator(Node n){
+	public RulesManager(Node n){
 		this.root = n;
 	}
 	
+	/**
+	 * Add a Node where another node that matches a condition is
+	 * @param n
+	 * 		Original Node
+	 * @param toAdd
+	 * 		New value for the new Node
+	 * @param cond
+	 * 		The original Node has to have this value
+	 */
 	private void addWhere(Node n, String toAdd, String cond){
 		if (n.hasSon(cond)){
 			n.add(toAdd);
@@ -17,6 +37,16 @@ public class Generator {
 			}
 		}
 	}
+
+	/**
+	 * Creates a new node similar to the parameter; Changes the value
+	 * @param n
+	 * 		Original node to start the search from
+	 * @param toAdd
+	 * 		New value for the cloned Node
+	 * @param cond
+	 * 		The original Node has to have this value
+	 */
 	private void cloneFrom(Node n, String toAdd, String cond){
 		if (n.hasSon(cond)){
 			Node clone = new Node(n.getSon(cond));
@@ -29,7 +59,17 @@ public class Generator {
 			}
 		}
 	}
+	
+	/**
+	 * Parses an input string (the rule) and applies the rule with different functions
+	 * @see cloneFrom, addWhere
+	 * @param rule
+	 * 		Rule to be parsed
+	 */
 	public void applyRule(String rule){
+		
+		System.out.println("* Generator rule:\t"+rule);
+		
 		String[] parts = rule.split(" ");
 		
 		// Command is: ADD * WHERE *
