@@ -111,7 +111,11 @@ public class Parser {
 						// otherwise it's necessarily 1
 						if(star.toLowerCase().contains("index")){
 							// TODO Manage multiple stars
-							starIndex = Integer.parseInt(star.substring(13,star.length()-3));
+							try{
+								starIndex = Integer.parseInt(star.substring(13,star.length()-3));
+							} catch(NumberFormatException e){
+								System.out.println("Problem with stars");
+							}
 						} else {
 							starIndex = 1;
 						}
@@ -173,7 +177,7 @@ public class Parser {
 	 */
 	public int writeToFile(String fileName, String template){
 		PrintWriter writer;
-		ArrayList<String> aiml = new ArrayList<String>();
+		HashSet<String> aiml = new HashSet<String>();
 		try {
 			aiml = toAIML(solutions, template);
 			writer = new PrintWriter(fileName, "UTF-8");
@@ -211,9 +215,9 @@ public class Parser {
 	 * @return
 	 * 		A String representing the AIML file
 	 */
-	private ArrayList<String> toAIML(ArrayList<String> solutions, String template){
+	private HashSet<String> toAIML(ArrayList<String> solutions, String template){
 		String toReturn = "";
-		ArrayList<String> outputAIML = new ArrayList<String>();
+		HashSet<String> outputAIML = new HashSet<String>();
 
 		/* AIML
 		 * <category>
@@ -276,7 +280,9 @@ public class Parser {
 				int index = getNumberStarsBeforeSharp(line)+1;
 				//TODO check this again
 				if (index > 0){
-					star = "<star index=\""+index+"\">";
+					star = " <star index=\""+index+"\"/>";
+				} else if (index == 1){
+					star = " <star/>";
 				}
 				
 				line += "</pattern>";

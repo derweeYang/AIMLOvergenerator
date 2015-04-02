@@ -15,7 +15,7 @@ public class SimpleTest {
 	
 	public static void main(String[] args) {
 
-		g = new Generator("WEATHER","input.aiml");
+		g = new Generator("BONJOUR","rules.aiml");
 		System.out.println(g);
 		System.out.println(g.getSimplifiedView());
 

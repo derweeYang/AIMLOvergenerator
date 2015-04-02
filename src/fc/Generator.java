@@ -51,14 +51,15 @@ public class Generator {
 		//System.out.println(root.toHierarchy(0));
 		
 		// 2. Operations - optional
-		gen.applyRule("CLONE rain FROM weather");
+		//gen.applyRule("CLONE rain FROM weather");
 
-		
-		// 3. Fill the ArrayList solutions
-		root.getSolutions("", solutions);
-				
-		// 4. Write the AIML
-		nbRulesOut = parser.writeToFile(outFile, template);
+		if (nbRulesIn != 0){
+			// 3. Fill the ArrayList solutions
+			root.getSolutions("", solutions);
+					
+			// 4. Write the AIML
+			nbRulesOut = parser.writeToFile(outFile, template);
+		}
 
 	}
 	
