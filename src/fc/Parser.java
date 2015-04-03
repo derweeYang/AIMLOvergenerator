@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -174,7 +176,7 @@ public class Parser {
 	 */
 	public int writeToFile(String fileName, String template){
 		PrintWriter writer;
-		HashSet<String> aiml = new HashSet<String>();
+		Set<String> aiml = new TreeSet<String>();
 		try {
 			aiml = toAIML(solutions, template);
 			writer = new PrintWriter(fileName, "UTF-8");
@@ -216,8 +218,8 @@ public class Parser {
 	 * @return
 	 * 		A String representing the AIML file
 	 */
-	private HashSet<String> toAIML(ArrayList<String> solutions, String template){
-		HashSet<String> outputAIML = new HashSet<String>();
+	private Set<String> toAIML(ArrayList<String> solutions, String template){
+		Set<String> outputAIML = new TreeSet<String>();
 
 		/* AIML
 		 * <category>

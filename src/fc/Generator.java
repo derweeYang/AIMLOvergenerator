@@ -56,6 +56,10 @@ public class Generator {
 		if (nbRulesIn != 0){
 			// 3. Fill the ArrayList solutions
 			root.getPossibleSentences("", solutions);
+			
+			for (String s : solutions) {
+				System.out.println(">>> "+s);
+			}
 					
 			// 4. Write the AIML
 			nbRulesOut = parser.writeToFile(outFile, template);
