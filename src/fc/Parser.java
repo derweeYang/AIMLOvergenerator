@@ -233,7 +233,7 @@ public class Parser {
 		String line = "";
 		
 		// for each path
-		for (String s: solutions){
+		for (String s: solutions){		
 			line = "";
 			// split to get each word
 			String[] words = s.split("}");

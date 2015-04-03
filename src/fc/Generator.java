@@ -24,6 +24,11 @@ public class Generator {
 	 */
 	private String template;
 	
+	
+	
+	private String inFile;
+	private String outFile;
+	
 	private int nbRulesIn = 0;
 	private int nbRulesOut = 0;
 
@@ -32,8 +37,8 @@ public class Generator {
 		this.template = template;
 		Generator.solutions = new ArrayList<String>();
 		
-		
-		String outFile = "aiml_out/"+template+"_out.aiml";
+		this.inFile = inFile;
+		this.outFile = "aiml_out/"+template+"_out.aiml";
 		
 		/* ************************* */
 		// Create a new tree
@@ -56,20 +61,36 @@ public class Generator {
 		if (nbRulesIn != 0){
 			// 3. Fill the ArrayList solutions
 			root.getPossibleSentences("", solutions);
-			
-			for (String s : solutions) {
-				System.out.println(">>> "+s);
-			}
-					
+								
 			// 4. Write the AIML
 			nbRulesOut = parser.writeToFile(outFile, template);
 		}
 
 	}
 	
+	public Node getTree(){
+		return root;
+	}
+	
+	public Node getSimplifiedTree(){
+		Node newTree = root.simplify();
+		return newTree;
+	}
+	
+	public String getInFile(){
+		return this.inFile;
+	}
+	public String getOutFile(){
+		return this.outFile;
+	}
+	
 	@Override
 	public String toString(){
-		return "Template '"+this.template+"':\t"+nbRulesIn+" ==> "+nbRulesOut;
+		return "Template '"+this.template+"':\t"+nbRulesIn+" rules (IN) => "+nbRulesOut+" rules (OUT)";
+	}
+	
+	public String toHTML(){
+		return "<html><u>"+this.template+"</u>\t<font color=red>"+nbRulesIn+"</font> => <font color=green>"+nbRulesOut+"</font></html>";
 	}
 	
 	public String toCSV(){

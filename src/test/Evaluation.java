@@ -57,7 +57,7 @@ public class Evaluation {
 				//			System.out.println(srai);
 				
 				// print file
-				System.out.println(f);
+				System.out.println("\n"+f);
 
 				for (String string : srai) {
 				
