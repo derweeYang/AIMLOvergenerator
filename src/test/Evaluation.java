@@ -56,6 +56,7 @@ public class Evaluation {
 				
 				//			System.out.println(srai);
 				
+				// print file
 				System.out.println(f);
 
 				for (String string : srai) {
@@ -65,6 +66,7 @@ public class Evaluation {
 					double imp = g.getImprovement();
 					
 					if (imp != 0){
+						//System.out.println(g.toCSV());
 						System.out.println(g+"\t\t["+imp+"%]");
 						sum += imp;
 						count++;

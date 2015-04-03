@@ -234,7 +234,7 @@ public class Parser {
 		for (String s: solutions){
 			line = "";
 			// split to get each word
-			String[] words = s.split(">");
+			String[] words = s.split("}");
 
 			// counter for the word
 			int current = 0;
@@ -286,7 +286,7 @@ public class Parser {
 
 				line=line.replace("#","*");
 				
-				line = line.replace("> ",">").replace(" <","<");
+				line = line.replace("pattern> ","pattern>").replace(" </pattern","</pattern");
 				outputAIML.add(line);
 				
 				line ="";

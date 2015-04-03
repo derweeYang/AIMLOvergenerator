@@ -8,7 +8,7 @@ public class SimpleTest {
 	
 	public static void main(String[] args) {
 
-		g = new Generator("DYK_DANCE","/home/getalp/fite/Documents/Corpus_ASR_Jason/Char_skill_dance/asr_dyk_dance.aiml");
+		g = new Generator("MY_NAME_IS_OK","/home/getalp/fite/Documents/Corpus_ASR_Jason/User_profile/asr_mynameis.aiml");
 		System.out.println(g);
 		//System.out.println(g.displayTree());
 		System.out.println(g.getSimplifiedView());

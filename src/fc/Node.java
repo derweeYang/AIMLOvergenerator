@@ -452,17 +452,17 @@ public class Node {
 			for (Node s: this.sons){
 				// take the inherited string and add value
 				// call the function again...
-				String sol = s.getPossibleSentences(p+">"+this.value, solutions);
+				String sol = s.getPossibleSentences(p+"}"+this.value, solutions);
 				// If there is something in sol
 				if (!sol.equals("")){
 					// Replace the >ROOT by nothing and truncate
-					solutions.add(sol.replace(">ROOT","").substring(1));
+					solutions.add(sol.replace("}ROOT","").substring(1));
 				}
 			}
 		}
 		// If this node can end a pattern, let's get to another one
 		if (this.endsPattern)
-			return p + ">" + this.value+"";
+			return p + "}" + this.value+"";
 		else return "";
 	}
 

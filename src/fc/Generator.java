@@ -68,6 +68,10 @@ public class Generator {
 		return "Template '"+this.template+"':\t"+nbRulesIn+" ==> "+nbRulesOut;
 	}
 	
+	public String toCSV(){
+		return ""+nbRulesIn+","+nbRulesOut+","+this.getImprovement();
+	}
+	
 	public String getSimplifiedView(){
 		Node newTree = root.simplify();
 		return newTree.toHierarchy(0);
