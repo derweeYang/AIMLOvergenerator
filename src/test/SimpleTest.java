@@ -1,12 +1,5 @@
 package test;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import fc.Generator;
 
 public class SimpleTest {
@@ -15,11 +8,10 @@ public class SimpleTest {
 	
 	public static void main(String[] args) {
 
-		g = new Generator("BONJOUR","rules.aiml");
+		g = new Generator("DYK_DANCE","/home/getalp/fite/Documents/Corpus_ASR_Jason/Char_skill_dance/asr_dyk_dance.aiml");
 		System.out.println(g);
+		//System.out.println(g.displayTree());
 		System.out.println(g.getSimplifiedView());
-
-
+		
 	}
-
 }

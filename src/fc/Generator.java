@@ -30,10 +30,10 @@ public class Generator {
 	public Generator(String template, String inFile) {
 		
 		this.template = template;
-		this.solutions = new ArrayList<String>();
+		Generator.solutions = new ArrayList<String>();
 		
 		
-		String outFile = template+"_out.aiml";
+		String outFile = "aiml_out/"+template+"_out.aiml";
 		
 		/* ************************* */
 		// Create a new tree
@@ -41,21 +41,21 @@ public class Generator {
 		// The generator can apply rules to the tree to extend it
 		RulesManager gen = new RulesManager(root);
 		// The parser will have to write and read solutions and root
-		parser = new Parser(solutions,root);
+		parser = new Parser(solutions);
 		/* ************************* */
 		
 		// 1. Read the AIML file
-		nbRulesIn = parser.parseAIML(inFile, template);
+		nbRulesIn = parser.parseAIML(inFile, template, root);
 
 		// The tree is filled here, display it
 		//System.out.println(root.toHierarchy(0));
 		
 		// 2. Operations - optional
-		//gen.applyRule("CLONE rain FROM weather");
+		//gen.applyRule("CLONE COUCOU FROM SALUT", root);
 
 		if (nbRulesIn != 0){
 			// 3. Fill the ArrayList solutions
-			root.getSolutions("", solutions);
+			root.getPossibleSentences("", solutions);
 					
 			// 4. Write the AIML
 			nbRulesOut = parser.writeToFile(outFile, template);
@@ -65,7 +65,7 @@ public class Generator {
 	
 	@Override
 	public String toString(){
-		return this.template+":\t"+nbRulesIn+" ==> "+nbRulesOut;
+		return "Template '"+this.template+"':\t"+nbRulesIn+" ==> "+nbRulesOut;
 	}
 	
 	public String getSimplifiedView(){
@@ -73,9 +73,13 @@ public class Generator {
 		return newTree.toHierarchy(0);
 	}
 	
+	public String displayTree(){
+		return root.toHierarchy(0);
+	}
+	
 	public double getImprovement(){
 		if (nbRulesIn > 0)
-		return (double)(nbRulesOut/nbRulesIn)*100.0;
+		return ((double)nbRulesOut/(double)nbRulesIn)*100.0;
 		return 0.0;
 	}
 

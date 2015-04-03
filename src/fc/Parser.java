@@ -13,13 +13,24 @@ import java.util.regex.Pattern;
 public class Parser {
 	
 	ArrayList<String> solutions;
-	Node root;
 	
-	public Parser(ArrayList<String> solutions, Node root){
+	/**
+	 * @param solutions
+	 * A reference to an ArrayList in which to store the solutions
+	 */
+	public Parser(ArrayList<String> solutions){
 		this.solutions = solutions;
-		this.root = root;
 	}
 	
+	/**
+	 * Replace all occurrences of a character, except for the 'at' one.
+	 * @param line
+	 * @param toReplace
+	 * @param by
+	 * @param at
+	 * @param except
+	 * @return
+	 */
 	private String replaceAllBut(String line, String toReplace, String by, int at, char except){
 		// change the except characater
 		if (at > 0){
@@ -56,7 +67,7 @@ public class Parser {
 	    return -1;
 	}
 	/**
-	 * Execute Python script to parse the input AIML file
+	 * Parses the input AIML file, fills the tree that the Parser manages.
 	 * @param AIMLFile
 	 * 		The AIML filename
 	 * @param template
@@ -64,7 +75,7 @@ public class Parser {
 	 * @return
 	 * 		The output filename
 	 */
-	public int parseAIML(String AIMLFile, String template){
+	public int parseAIML(String AIMLFile, String template, Node root){
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(AIMLFile));
 			String line;
@@ -137,7 +148,9 @@ public class Parser {
 			
 			// Add all patterns to the set
 			for (String string : patterns) {
-				//System.out.println(string);
+				// Replace double (and more) spaces by single space
+				string = string.trim().replaceAll(" +", " ");
+				// Add the sentence to the tree
 				root.add(string);
 			}
 			
@@ -149,23 +162,7 @@ public class Parser {
 			e.printStackTrace();
 		}
 		
-		return 0;
-		
-		/* IN PYTHON
-		String pyscript = "getPatterns.py";
-		String outfile="patterns.txt";
-		
-		System.out.println("P/ Read from file:\t"+AIMLFile);
-		ProcessBuilder pb = new ProcessBuilder("python",pyscript,AIMLFile,template,outfile);
-		Process p;
-		try {	
-			p = pb.start();
-			System.out.println("P/ Wrote to file:\t"+outfile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		*/
-		
+		return 0;	
 	}
 	
 	/**
@@ -194,6 +191,10 @@ public class Parser {
 		return 0;
 	}
 	
+	/**
+	 * @param l
+	 * @return The number of * before a # appears in the string given as param.
+	 */
 	private int getNumberStarsBeforeSharp(String l){
 		// need to find #
 		// and count the number of * before that
@@ -216,7 +217,6 @@ public class Parser {
 	 * 		A String representing the AIML file
 	 */
 	private HashSet<String> toAIML(ArrayList<String> solutions, String template){
-		String toReturn = "";
 		HashSet<String> outputAIML = new HashSet<String>();
 
 		/* AIML
@@ -228,7 +228,6 @@ public class Parser {
 		 * </category>
 		 */
 		
-		int nbStarsInPattern = 0;
 		String line = "";
 		
 		// for each path
@@ -240,17 +239,11 @@ public class Parser {
 			// counter for the word
 			int current = 0;
 			int max = (int) Math.pow(2, words.length+1)+1;
-			int limit = max-1;
-			
 			// if number of words isn't even
 			if (words.length%2 != 0){
 				max = (int) Math.pow(2, words.length+1);
-				limit = max;
 			}
 
-			// max = 2^words ~ 
-			nbStarsInPattern = 0;
-			
 			// for each space between words
 			for (int i = 0; i < max; i++){
 				current = 0;
@@ -262,7 +255,6 @@ public class Parser {
 				for (int j = max; j >= 2; j /= 2 ){
 					if (i%j < j/2){
 						line += " * ";
-						nbStarsInPattern++;
 					}
 					else line += " . ";
 					
@@ -273,8 +265,9 @@ public class Parser {
 				line = line.replace("* # *","#");
 				line = line.replace("# *","#");
 				line = line.replace("* #","#");
-				line = line.replace(" # "," # ");
 				line = line.replace(" .","");
+				
+				line += "</pattern>";
 				
 				String star = "";
 				int index = getNumberStarsBeforeSharp(line)+1;
@@ -284,11 +277,11 @@ public class Parser {
 				} else if (index == 1){
 					star = " <star/>";
 				}
-				
-				line += "</pattern>";
+
 				line += "<template>";
 				line += "<srai>"+template+" "+star+"</srai>"; // add <star index="">
 				line += "</template>";
+				
 				line += "</category>";
 
 				line=line.replace("#","*");

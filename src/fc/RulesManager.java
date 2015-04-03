@@ -12,10 +12,10 @@ public class RulesManager {
 	/**
 	 * The tree it is linked to. All rules will apply to this tree
 	 */
-	Node root;
+	//Node root;
 	
 	public RulesManager(Node n){
-		this.root = n;
+		//this.root = n;
 	}
 	
 	/**
@@ -66,7 +66,7 @@ public class RulesManager {
 	 * @param rule
 	 * 		Rule to be parsed
 	 */
-	public void applyRule(String rule){
+	public void applyRule(String rule, Node root){
 		
 		System.out.println("* Generator rule:\t"+rule);
 		

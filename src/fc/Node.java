@@ -11,8 +11,8 @@ public class Node {
 	ArrayList<Node> sons;
 	
 	boolean endsPattern; // can the node conclude?
-	boolean toBeDeleted = false;
 	boolean optional = false;
+	boolean toBeDeleted = false;
 	
 	/**
 	 * Default constructor
@@ -22,7 +22,6 @@ public class Node {
 		this.sons = new ArrayList<Node>();
 		this.otherValues = new ArrayList<String>();
 		this.endsPattern = false;
-
 	}
 	
 	/**
@@ -446,14 +445,14 @@ public class Node {
 	 * 		Nothing interesting to the principal caller, but is useful for
 	 * 		recursive purposes.
 	 */
-	public String getSolutions(String p, ArrayList<String> solutions){
+	public String getPossibleSentences(String p, ArrayList<String> solutions){
 		// if there are sons
 		if(this.sons.size() > 0){
 			// for each son
 			for (Node s: this.sons){
 				// take the inherited string and add value
 				// call the function again...
-				String sol = s.getSolutions(p+">"+this.value, solutions);
+				String sol = s.getPossibleSentences(p+">"+this.value, solutions);
 				// If there is something in sol
 				if (!sol.equals("")){
 					// Replace the >ROOT by nothing and truncate

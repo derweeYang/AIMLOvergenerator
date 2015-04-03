@@ -52,6 +52,7 @@ public class Evaluation {
 						}
 					}
 				}
+				aimlfile.close();
 				
 				//			System.out.println(srai);
 				
@@ -72,9 +73,11 @@ public class Evaluation {
 						fail_count++;
 					}
 				}
+
 			}
 			
 			System.out.println("Done");
+			br.close();
 			
 		} catch (IOException e){
 			
