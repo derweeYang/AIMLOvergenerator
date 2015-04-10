@@ -1,0 +1,7 @@
+<category><pattern>weather tomorrow</pattern><template><srai>WEATHER</srai></template></category>
+<category><pattern>weather tomorrow evening</pattern><template><srai>WEATHER</srai></template></category>
+<category><pattern>weather tomorrow morning</pattern><template><srai>WEATHER</srai></template></category>
+<category><pattern>weather tomorrow morning in *</pattern><template><srai>WEATHER <star/></srai></template></category>
+<category><pattern>what weather tomorrow</pattern><template><srai>WEATHER</srai></template></category>
+<category><pattern>what weather tomorrow in *</pattern><template><srai>WEATHER <star/></srai></template></category>
+
