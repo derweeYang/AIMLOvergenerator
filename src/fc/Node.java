@@ -355,6 +355,8 @@ public class Node {
 			toReturn += "|"+s;
 		
 		if (this.optional) toReturn += ")?";
+		if (this.endsPattern) toReturn += ".";
+		
 		/*
 		for (Node n: this.sons){
 			toReturn += "";

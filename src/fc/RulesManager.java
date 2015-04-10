@@ -52,11 +52,11 @@ public class RulesManager {
 			Node clone = new Node(n.getSon(cond));
 			clone.value = toAdd;
 			n.add(clone);
+			
+			
 		}
-		else{
-			for (Node s: n.sons){
-				this.cloneFrom(s, toAdd, cond);
-			}
+		for (Node s: n.sons){
+			this.cloneFrom(s, toAdd, cond);
 		}
 	}
 	

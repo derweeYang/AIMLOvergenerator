@@ -1,6 +1,10 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -9,6 +13,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -19,7 +24,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreePath;
 
 import fc.Generator;
 import fc.Node;
@@ -27,14 +35,22 @@ import fc.Node;
 public class TreeGUI extends JFrame
 {
     private JTree tree;
+    private Generator g;
     
     public TreeGUI(Generator g)
     {
+		this.g = g;
 		
     	Node t = g.getSimplifiedTree();
 		t.simplify();
 		
-        //create the root node
+		this.fillAndDisplay(t);
+        
+    }
+
+    
+    private void fillAndDisplay(Node t){
+    	//create the root node
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
         
         this.addUnder(root,t);
@@ -57,13 +73,37 @@ public class TreeGUI extends JFrame
             tree.expandRow(i);
         }
         
+        DefaultTreeCellRenderer cellRenderer = new DefaultTreeCellRenderer() {
+            private Icon loadIcon = UIManager.getIcon("OptionPane.errorIcon");
+            private Icon saveIcon = UIManager.getIcon("OptionPane.informationIcon");
+            @Override
+            public Component getTreeCellRendererComponent(JTree tree,
+                    Object value, boolean selected, boolean expanded,
+                    boolean isLeaf, int row, boolean focused) {
+                Component c = super.getTreeCellRendererComponent(tree, value,
+                        selected, expanded, isLeaf, row, focused);
+                if (selected){
+                    setIcon(loadIcon);
+                }
+                else{
+                    setIcon(saveIcon);
+                }
+                return c;
+            }
+        };
+        tree.setCellRenderer(cellRenderer);
         // - - - Top menu
-        JButton 	btn = new JButton("Does it match?");
-        JTextField 	textf = new JTextField(20);
+        JButton 	btn = new JButton("SURGEN!");
+        final JTextField 	inFile = new JTextField(20);
+        final JTextField 	template = new JTextField(20);
         
         JPanel menu_top = new JPanel();
-        menu_top.add(textf);
+        menu_top.add(inFile);
+        menu_top.add(template);
         menu_top.add(btn);
+        
+        
+        
         // add the top menu
         main.add(menu_top, BorderLayout.NORTH);
 
@@ -109,8 +149,16 @@ public class TreeGUI extends JFrame
         this.setTitle("Surgenerator");        
         this.pack();
         this.setVisible(true);
+        
+        
+
     }
     
+    /**
+     * Recursive funcction that fills the GUI tree with t
+     * @param root
+     * @param t
+     */
     private void addUnder(DefaultMutableTreeNode root, Node t){
     	//create the child nodes
         for (Node son: t.getSons()){

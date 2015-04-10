@@ -56,7 +56,7 @@ public class Generator {
 		//System.out.println(root.toHierarchy(0));
 		
 		// 2. Operations - optional
-		//gen.applyRule("CLONE COUCOU FROM SALUT", root);
+		gen.applyRule("CLONE cold FROM weather", root);
 
 		if (nbRulesIn != 0){
 			// 3. Fill the ArrayList solutions
@@ -82,6 +82,13 @@ public class Generator {
 	}
 	public String getOutFile(){
 		return this.outFile;
+	}
+	
+	public void setInFile(String f){
+		this.inFile = f;
+	}
+	public void setOutFile(String f){
+		this.outFile = f;
 	}
 	
 	@Override

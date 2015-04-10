@@ -9,7 +9,8 @@ public class SimpleTest {
 	
 	public static void main(String[] args) {
 
-		g = new Generator("PLAY_DANCE_ON","/home/getalp/fite/Documents/Corpus_ASR_Jason/Char_skill_dance/asr_play_dance_on.aiml");
+		//g = new Generator("ASK_FOR_WHO_ARE_ALIENS","/home/getalp/fite/Documents/Corpus_ASR_Jason/Game_earth_defender/asr_infos_game.aiml");
+		g = new Generator("WEATHER","input.aiml");
 		System.out.println(g);
 		//System.out.println(g.displayTree());
 		//System.out.println(g.getSimplifiedView());
