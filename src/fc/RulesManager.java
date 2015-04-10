@@ -29,10 +29,10 @@ public class RulesManager {
 	 */
 	private void addWhere(Node n, String toAdd, String cond){
 		if (n.hasSon(cond)){
-			n.add(toAdd);
+			n.addSentence(toAdd);
 		}
 		else{
-			for (Node s: n.sons){
+			for (Node s: n.getSons()){
 				this.addWhere(s, toAdd, cond);
 			}
 		}
@@ -50,19 +50,20 @@ public class RulesManager {
 	private void cloneFrom(Node n, String toAdd, String cond){
 		if (n.hasSon(cond)){
 			Node clone = new Node(n.getSon(cond));
-			clone.value = toAdd;
-			n.add(clone);
+			clone.setValue(toAdd);
+			n.addSon(clone);
 			
 			
 		}
-		for (Node s: n.sons){
+		for (Node s: n.getSons()){
 			this.cloneFrom(s, toAdd, cond);
 		}
 	}
 	
 	/**
 	 * Parses an input string (the rule) and applies the rule with different functions
-	 * @see cloneFrom, addWhere
+	 * @see cloneFrom
+	 * @see addWhere
 	 * @param rule
 	 * 		Rule to be parsed
 	 */

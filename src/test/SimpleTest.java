@@ -1,21 +1,36 @@
 package test;
 
-import fc.Generator;
+import fc.Manager;
 import gui.TreeGUI;
 
+/**
+ * Example of workflow
+ * @author Laurent Fite
+ *
+ */
 public class SimpleTest {
 
-	public static Generator g;
+	public static Manager m;
 	
 	public static void main(String[] args) {
 
 		//g = new Generator("ASK_FOR_WHO_ARE_ALIENS","/home/getalp/fite/Documents/Corpus_ASR_Jason/Game_earth_defender/asr_infos_game.aiml");
-		g = new Generator("WEATHER","input.aiml");
-		System.out.println(g);
-		//System.out.println(g.displayTree());
-		//System.out.println(g.getSimplifiedView());
 		
-		TreeGUI gui = new TreeGUI(g);
+		// Create a new manager for this file and this template
+		m = new Manager("WEATHER","input.aiml");
+		
+		// Apply a rule on the tree
+		m.applyRule("clone climate from weather");
+		
+		// Generate the AIML file
+		m.generateFile();
+		
+		// Display the result and the tree
+		System.out.println(m);
+		System.out.println(m.getSimplifiedView());
+		
+		// Create a GUI window to sum it up
+		// TreeGUI gui = new TreeGUI(m);
 		
 	}
 }

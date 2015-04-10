@@ -1,18 +1,33 @@
 package fc;
 import java.util.ArrayList;
 
-
+/**
+ * A node is a word in the sentence tree.
+ * It can have multiple sons (the possible words that can follow in a sentence)
+ * 
+ * @author Laurent Fite
+ *
+ */
 public class Node {
 	
 	//ArrayList<String> solutions;
 	
-	String value;
-	ArrayList<String> otherValues;
-	ArrayList<Node> sons;
+	private String value;
+	private ArrayList<String> otherValues;
+	private ArrayList<Node> sons;
 	
-	boolean endsPattern; // can the node conclude?
-	boolean optional = false;
-	boolean toBeDeleted = false;
+	/**
+	 * Can the node conclude a sentence?
+	 */
+	public boolean endsPattern;
+	/**
+	 * Is the node not necessary in the sentence?
+	 */
+	public boolean optional = false;
+	/**
+	 * Is the node in the process of being deleted?
+	 */
+	private boolean toBeDeleted = false;
 	
 	/**
 	 * Default constructor
@@ -82,7 +97,7 @@ public class Node {
 	 * Checks if there is only one son with a similar value to n
 	 * @param c
 	 * 		Value of the son
-	 * @return
+	 * @return True if there is only one son with the value given as parameter
 	 */
 	public boolean hasOnlySon(String c){
 		return this.hasSon(c) && this.sons.size() == 1;
@@ -92,7 +107,7 @@ public class Node {
 	 * Check if there is only one son equals to n
 	 * @param n
 	 * 		Node whose value will be compared to..
-	 * @return
+	 * @return True if there is only one son with the value given as parameter
 	 */
 	public boolean hasOnlySon(Node n){
 		return this.hasSon(n.value) && this.sons.size() == 1;
@@ -125,15 +140,7 @@ public class Node {
 		return null;
 	}
 	
-	/**
-	 * Get a particular son (with the same value)
-	 * @param n
-	 * 		The Node to compare the sons to
-	 * @return The son you're looking for
-	 */
-	public Node getSon(Node n){
-		return getSon(n.value);
-	}
+
 	
 	/**
 	 * Add a sentence to the tree.
@@ -141,7 +148,7 @@ public class Node {
 	 * 		The sentence to be added. It will be split with " " and each
 	 * 		word will be added one after the other
 	 */
-	public void add(String s){
+	public void addSentence(String s){
 		String[] parts = s.split(" ");
 		
 		Node current = this;
@@ -168,7 +175,7 @@ public class Node {
 	 * @param n
 	 * 		Son to add
 	 */
-	public void add(Node n){
+	public void addSon(Node n){
 		this.sons.add(n);
 	}
 	
@@ -197,10 +204,11 @@ public class Node {
 	}
 	
 	/* ************************************************************* */
+	/* DATA MANIPULATION */
 	
 	/**
 	 * Check if the Node is equal to the one given as parameter.
-	 * This checks if the subtrees are the same and if the value is the same
+	 * This checks if the subtrees are the same and if the value is the same.
 	 * (the last step can be bypassed)
 	 * @param n
 	 * 		Node to compare
@@ -245,7 +253,7 @@ public class Node {
 	 * it can be factorised.
 	 * Example: r ( x(y,z) u(y,z) ) ==> r ( x|u (y,z) )
 	 */
-	public void factorise(){
+	private void factorise(){
 		Node s1, s2;
 		
 		if (this.sons.size() == 1){
@@ -289,7 +297,7 @@ public class Node {
 	/**
 	 * Remove optional nodes from the tree
 	 */
-	public void optionalNodes(){
+	private void optionalNodes(){
 		Node s1, s2;
 		
 		//System.out.println(this.sons.size());
@@ -337,12 +345,75 @@ public class Node {
 		
 		return newTree;
 	}
+	
+	/* ************************************************************* */
+
+	/**
+	 * From this node, get all the possible paths to leaves
+	 * @param p
+	 * 		Inherited value
+	 * @param solutions
+	 * 		ArrayList in which all the different paths will be written
+	 * @return
+	 * 		Nothing interesting to the principal caller, but is useful for
+	 * 		recursive purposes.
+	 */
+	public String getPossibleSentences(String p, ArrayList<String> solutions){
+		// if there are sons
+		if(this.sons.size() > 0){
+			// for each son
+			for (Node s: this.sons){
+				// take the inherited string and add value
+				// call the function again...
+				String sol = s.getPossibleSentences(p+"}"+this.value, solutions);
+				// If there is something in sol
+				if (!sol.equals("")){
+					// Replace the >ROOT by nothing and truncate
+					solutions.add(sol.replace("}ROOT","").substring(1));
+				}
+			}
+		}
+		// If this node can end a pattern, let's get to another one
+		if (this.endsPattern)
+			return p + "}" + this.value+"";
+		else return "";
+	}
 
 	/* ************************************************************* */
+	/* GETTERS AND SETTERS */
+	
+	/**
+	 * Get sons of this Node
+	 * @return An ArrayList of Nodes (the sons)
+	 */
+	public ArrayList<Node> getSons() {
+		return this.sons;
+	}
+	
+	/**
+	 * Change the value of the node
+	 * @param v
+	 */
+	public void setValue(String v){
+		this.value = v;
+	}
+	
+	/**
+	 * Get a particular son (with the same value)
+	 * @param n
+	 * 		The Node to compare the sons to
+	 * @return The son you're looking for
+	 */
+	public Node getSon(Node n){
+		return getSon(n.value);
+	}
+	
+	/* ************************************************************* */
+	/* DISPLAY FUNCTIONS */
 	
 	@Override
 	/**
-	 * Returns a String value for a Node
+	 * Displays the node (all the different values, if the node is optional or terminal)
 	 */
 	public String toString(){
 		
@@ -356,18 +427,41 @@ public class Node {
 		
 		if (this.optional) toReturn += ")?";
 		if (this.endsPattern) toReturn += ".";
-		
-		/*
-		for (Node n: this.sons){
-			toReturn += "";
-			toReturn += "(";
-			toReturn += n;
-			toReturn += ")";
-		}
-		*/
-		
+
 		return toReturn;
 		
+	}
+
+	/**
+	 * Displays the tree in an textual form - easier to read (lighter than XML)
+	 * @param depth
+	 * 		Useful for tabs
+	 * @return Textual representation of the tree (starting from this)
+	 */
+	public String toHierarchy(int depth){
+		depth++;
+		String toReturn = "";
+		
+		if (this.optional) toReturn += "(";
+		toReturn += value;
+		
+		for (String s: this.otherValues)
+			toReturn += "|"+s;
+		
+		if (this.optional) toReturn += ")?";
+		
+		if (this.endsPattern) toReturn += ".";
+		
+		for (Node n: this.sons){
+			toReturn += "\n";
+			for (int i=0;i<depth;i++)
+				toReturn += "  ";
+			toReturn += n.toHierarchy(depth+1);
+		}
+		for (int i=0;i<depth-2;i++)
+			toReturn += "  ";
+
+		return toReturn;
 	}
 	
 	/**
@@ -403,74 +497,9 @@ public class Node {
 		return toReturn;
 	}
 	
-	/**
-	 * Displays the tree in an textual form - easier to read (lighter than XML)
-	 * @param depth
-	 * 		Useful for tabs
-	 * @return Textual representation of the tree (starting from this)
-	 */
-	public String toHierarchy(int depth){
-		depth++;
-		String toReturn = "";
-		
-		if (this.optional) toReturn += "(";
-		toReturn += value;
-		
-		for (String s: this.otherValues)
-			toReturn += "|"+s;
-		
-		if (this.optional) toReturn += ")?";
-		
-		if (this.endsPattern) toReturn += ".";
-		
-		for (Node n: this.sons){
-			toReturn += "\n";
-			for (int i=0;i<depth;i++)
-				toReturn += "  ";
-			toReturn += n.toHierarchy(depth+1);
-		}
-		for (int i=0;i<depth-2;i++)
-			toReturn += "  ";
 
-		return toReturn;
-	}
+
 	
-	/* ************************************************************* */
-
-	/**
-	 * From this node, get all the possible paths to leaves
-	 * @param p
-	 * 		Inherited value
-	 * @param solutions
-	 * 		ArrayList in which all the different paths will be written
-	 * @return
-	 * 		Nothing interesting to the principal caller, but is useful for
-	 * 		recursive purposes.
-	 */
-	public String getPossibleSentences(String p, ArrayList<String> solutions){
-		// if there are sons
-		if(this.sons.size() > 0){
-			// for each son
-			for (Node s: this.sons){
-				// take the inherited string and add value
-				// call the function again...
-				String sol = s.getPossibleSentences(p+"}"+this.value, solutions);
-				// If there is something in sol
-				if (!sol.equals("")){
-					// Replace the >ROOT by nothing and truncate
-					solutions.add(sol.replace("}ROOT","").substring(1));
-				}
-			}
-		}
-		// If this node can end a pattern, let's get to another one
-		if (this.endsPattern)
-			return p + "}" + this.value+"";
-		else return "";
-	}
-
-	public ArrayList<Node> getSons() {
-		return this.sons;
-	}
 
 	
 }

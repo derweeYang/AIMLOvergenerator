@@ -29,37 +29,98 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
-import fc.Generator;
+import fc.Manager;
 import fc.Node;
 
+/**
+ * Graphical application that shows the input aiml file, the output aiml file
+ * and the simplifed tree.
+ * 
+ * Improvements may be added in the next version but this isn't the biggest part of the project
+ * 
+ * @author Laurent Fite
+ *
+ */
 public class TreeGUI extends JFrame
 {
-    private JTree tree;
-    private Generator g;
     
-    public TreeGUI(Generator g)
-    {
-		this.g = g;
+    private Manager m;
+    private Node simplifiedt;
+    
+    // text area
+    JTextArea		input;
+    JTextArea		output;
+    // text fields
+    JTextField 		inFile;
+    JTextField 		template;
+    // tree
+    JTree 			tree;
+    JComponent		treeComp;
+    
+    public TreeGUI() {
+    	// Create a new manager for this file and this template
+		this.m = new Manager("METEO_TOMORROW","asr_meteo_tomorrow.aiml");		
+		// Apply a rule on the tree
+		m.applyRule("clone climate from weather");
 		
-    	Node t = g.getSimplifiedTree();
-		t.simplify();
+		// Generate the AIML file
+		m.generateFile();
 		
-		this.fillAndDisplay(t);
+		simplifiedt = new Node(m.getSimplifiedTree());
+		//simplifiedt.simplify();
+		
+		this.fillAndDisplay();
         
     }
 
+    /**
+     * Function called on click on the button
+     */
+    private void update(){
+    	m = new Manager(template.getText(),inFile.getText());
+    	m.generateFile();
+    	simplifiedt = m.getSimplifiedTree();
+    	System.out.println(simplifiedt.toHierarchy(0));
+    	
+    	// update two boxes
+    	FileReader inputFile, outputFile;
+		try {
+			inputFile = new FileReader(m.getInFile());
+			outputFile = new FileReader(m.getOutFile());
+			BufferedReader br_in = new BufferedReader(inputFile);
+			BufferedReader br_out = new BufferedReader(outputFile);
+			input.read(br_in, "input file");
+			output.read(br_out, "output file");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		// update tree
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
+        
+        this.addUnder(root,simplifiedt);
+                
+        //create the tree by passing in the root node
+        tree = new JTree(root);
+        treeComp = new JScrollPane(tree);
+        
+        
+    }
     
-    private void fillAndDisplay(Node t){
+    /**
+     * Display the infrmation in the GUI
+     */
+    private void fillAndDisplay(){
     	//create the root node
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
         
-        this.addUnder(root,t);
+        this.addUnder(root,simplifiedt);
         
         JPanel main = new JPanel();
         
         //create the tree by passing in the root node
         tree = new JTree(root);
-        JComponent treeComp = new JScrollPane(tree);
+        treeComp = new JScrollPane(tree);
         
         
         // MAIN PANEL
@@ -92,17 +153,24 @@ public class TreeGUI extends JFrame
             }
         };
         tree.setCellRenderer(cellRenderer);
+        
         // - - - Top menu
         JButton 	btn = new JButton("SURGEN!");
-        final JTextField 	inFile = new JTextField(20);
-        final JTextField 	template = new JTextField(20);
+        inFile = new JTextField(20);
+        template = new JTextField(20);
         
         JPanel menu_top = new JPanel();
         menu_top.add(inFile);
         menu_top.add(template);
         menu_top.add(btn);
         
-        
+        btn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				update();
+			}
+		});
         
         // add the top menu
         main.add(menu_top, BorderLayout.NORTH);
@@ -110,7 +178,7 @@ public class TreeGUI extends JFrame
         
         // - - - Bottom menu
         JPanel menu_bottom = new JPanel();
-        JLabel		text = new JLabel(g.toHTML());
+        JLabel		text = new JLabel(m.toHTML());
         menu_bottom.add(text);
         // add the top menu
         main.add(menu_bottom, BorderLayout.SOUTH);
@@ -119,15 +187,15 @@ public class TreeGUI extends JFrame
         // - - - Left
         JPanel menu_left = new JPanel();
         menu_left.setLayout(new BorderLayout());
-        JTextArea		input = new JTextArea(20,60);
-        JTextArea		output = new JTextArea(20,60);
+        input = new JTextArea(20,60);
+        output = new JTextArea(20,60);
         JScrollPane 	scroll1 = new JScrollPane(input); 
         JScrollPane 	scroll2 = new JScrollPane(output); 
         
         FileReader inputFile, outputFile;
 		try {
-			inputFile = new FileReader(g.getInFile());
-			outputFile = new FileReader(g.getOutFile());
+			inputFile = new FileReader(m.getInFile());
+			outputFile = new FileReader(m.getOutFile());
 			BufferedReader br_in = new BufferedReader(inputFile);
 			BufferedReader br_out = new BufferedReader(outputFile);
 			input.read(br_in, "input file");
@@ -155,7 +223,7 @@ public class TreeGUI extends JFrame
     }
     
     /**
-     * Recursive funcction that fills the GUI tree with t
+     * Recursive function that fills the GUI tree with t
      * @param root
      * @param t
      */
@@ -167,5 +235,6 @@ public class TreeGUI extends JFrame
             addUnder(guiNode,son);
         }
     }
+
        
 }

@@ -1,10 +1,12 @@
 package fc;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,8 +14,19 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This class is used to:
+ * - Read AIML files in order to fill the sentence tree
+ * - Generate the AIML file from the sentence tree
+ * 
+ * @author Laurent Fite
+ *
+ */
 public class Parser {
 	
+	/**
+	 * Sentences generated from the tree
+	 */
 	ArrayList<String> solutions;
 	
 	/**
@@ -31,7 +44,7 @@ public class Parser {
 	 * @param by
 	 * @param at
 	 * @param except
-	 * @return
+	 * @return The changed String
 	 */
 	private String replaceAllBut(String line, String toReplace, String by, int at, char except){
 		// change the except characater
@@ -51,11 +64,12 @@ public class Parser {
 	}
 	
 	/**
-	 * Source: stackoverflow
+	 * Get the nth index of a character in a String
+	 * Source: Stackoverflow
 	 * @param text
 	 * @param needle
 	 * @param n
-	 * @return
+	 * @return The index
 	 */
 	private int nthIndexOf(String text, char needle, int n){
 	    for (int i = 0; i < text.length(); i++){
@@ -68,14 +82,17 @@ public class Parser {
 	    }
 	    return -1;
 	}
+	
 	/**
-	 * Parses the input AIML file, fills the tree that the Parser manages.
+	 * Parses the input AIML file, fills the tree given as parameter
 	 * @param AIMLFile
 	 * 		The AIML filename
 	 * @param template
 	 * 		The template to work on
+	 * @param root
+	 * 		The tree to fill
 	 * @return
-	 * 		The output filename
+	 * 		The number of patterns read
 	 */
 	public int parseAIML(String AIMLFile, String template, Node root){
 		try {
@@ -153,7 +170,7 @@ public class Parser {
 				// Replace double (and more) spaces by single space
 				string = string.trim().replaceAll(" +", " ");
 				// Add the sentence to the tree
-				root.add(string);
+				root.addSentence(string);
 			}
 			
 			br.close();
@@ -273,6 +290,7 @@ public class Parser {
 				
 				String star = "";
 				int index = getNumberStarsBeforeSharp(line)+1;
+				
 				//TODO check this again
 				if (index > 0){
 					star = " <star index=\""+index+"\"/>";
