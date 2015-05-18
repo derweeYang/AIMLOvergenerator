@@ -124,9 +124,7 @@ public class RulesManager {
 
 					root.addOtherValue(string.replace("_"," "));
 				}
-				
 			}
-			
 		} catch (IllegalAccessException | InvocationTargetException
 				| InstantiationException | NoSuchMethodException
 				| ClassNotFoundException | NoSuchVocableException | IOException e) {

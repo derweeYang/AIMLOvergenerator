@@ -14,19 +14,19 @@ public class Manager {
 	/**
 	 * The tree
 	 */
-	private static Node root;
+	private Node root;
 	
 	/**
 	 * ArrayList containing all possible paths in the tree (forming sentences)
 	 */
-	private static ArrayList<String> solutions;
+	private ArrayList<String> solutions;
 	
 	/**
 	 * The parser object to read and write files
 	 */
-	private static Parser parser;
+	private Parser parser;
 	
-	private static RulesManager rulesManager;
+	private RulesManager rulesManager;
 	
 	/**
 	 * One generator per template
@@ -49,7 +49,7 @@ public class Manager {
 	public Manager(String template, String inFile) {
 		
 		this.template = template;
-		Manager.solutions = new ArrayList<String>();
+		this.solutions = new ArrayList<String>();
 		
 		this.inFile = inFile;
 		this.outFile = "aiml_out/"+template+"_out.aiml";
@@ -75,6 +75,9 @@ public class Manager {
 		rulesManager.applyRule(rule, root);
 	}
 	
+	/**
+	 * Generate synonyms for words that have synonyms
+	 */
 	public void applySyn(){
 		rulesManager.applySynonyms(root);
 	}

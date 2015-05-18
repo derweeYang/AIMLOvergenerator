@@ -29,7 +29,7 @@ public class SimpleTest {
 		// Display the result and the tree
 		System.out.println(m);
 		System.out.println(m.getView());
-		//System.out.println(m.getSimplifiedView());
+		System.out.println(m.getSimplifiedView());
 
 		
 	}

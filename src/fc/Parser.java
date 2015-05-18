@@ -86,7 +86,7 @@ public class Parser {
 	/**
 	 * Parses the input AIML file, fills the tree given as parameter
 	 * @param AIMLFile
-	 * 		The AIML filename
+	 * 		The AIML filename to read
 	 * @param template
 	 * 		The template to work on
 	 * @param root
@@ -190,12 +190,15 @@ public class Parser {
 	 * 		The output filename (AIML)
 	 * @param template
 	 * 		The template that we've worked on
+	 *  @return The number of unique rules in the generated file
 	 */
 	public int writeToFile(String fileName, String template){
 		PrintWriter writer;
 		Set<String> aiml = new TreeSet<String>();
 		try {
 			aiml = toAIML(solutions, template);
+			
+			// Classic Java stuff
 			writer = new PrintWriter(fileName, "UTF-8");
 			for (String l : aiml) {
 				writer.println(l);
@@ -233,7 +236,7 @@ public class Parser {
 	 * @param solutions
 	 * 		Reference to the ArrayList in which all the paths are listed
 	 * @return
-	 * 		A String representing the AIML file
+	 * 		A Set of String containing the rules in the new AIML file
 	 */
 	private Set<String> toAIML(ArrayList<String> solutions, String template){
 		Set<String> outputAIML = new TreeSet<String>();
@@ -250,7 +253,7 @@ public class Parser {
 		String line = "";
 		
 		// for each path
-		for (String s: solutions){		
+		for (String s: solutions){
 			line = "";
 			// split to get each word
 			String[] words = s.split("}");

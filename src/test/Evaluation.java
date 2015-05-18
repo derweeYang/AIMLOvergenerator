@@ -64,57 +64,58 @@ public class Evaluation {
 
 				// =====================================================
 				// =====================================================
+				boolean thread = false;
 				for (String template : srai) {
 					
-					/*
-					final String temp = template;
-					final String file = f;
-					new Thread(){
-						public void run(){
-							man = new Manager(temp,file);
-							
-							// APPLY SYNONYMS WITH DBNARY?
-							man.applySyn();
-							
-							man.generateFile();
-							
-							double imp = man.getImprovement();
-							
-							if (imp != 0){
-								System.out.println(man.toCSV());
-								// = = = PRINT IMPROVEMENT
-								//System.out.println(g+"\t\t["+imp+"%]");
-								//sum += imp;
-								//count++;
-							} else {
-								// = = = PRINT IF FAILED
-								//System.out.println(g+"\t\tFAILED!!!");
-								//fail_count++;
+					if (thread){
+						final String temp = template;
+						final String file = f;
+						new Thread(){
+							public void run(){
+								
+								Manager m = new Manager(temp,file);
+								
+								// APPLY SYNONYMS WITH DBNARY?
+								//man.applySyn();
+								
+								m.generateFile();
+								
+								double imp = m.getImprovement();
+								
+								if (imp != 0){
+									System.out.println(m.toCSV());
+									// = = = PRINT IMPROVEMENT
+									//System.out.println(g+"\t\t["+imp+"%]");
+									//sum += imp;
+									//count++;
+								} else {
+									// = = = PRINT IF FAILED
+									//System.out.println(g+"\t\tFAILED!!!");
+									//fail_count++;
+								}
 							}
-						}
-					}.start();
-					*/
-					
-					
-					man = new Manager(template,f);
-					
-					// APPLY SYNONYMS WITH DBNARY?
-					//man.applySyn();
-					
-					man.generateFile();
-					
-					double imp = man.getImprovement();
-					
-					if (imp != 0){
-						System.out.println(man.toString());
-						// = = = PRINT IMPROVEMENT
-						//System.out.println(g+"\t\t["+imp+"%]");
-						sum += imp;
-						count++;
+						}.start();
 					} else {
-						// = = = PRINT IF FAILED
-						//System.out.println(g+"\t\tFAILED!!!");
-						fail_count++;
+						man = new Manager(template,f);
+						
+						// APPLY SYNONYMS WITH DBNARY?
+						//man.applySyn();
+						
+						man.generateFile();
+						
+						double imp = man.getImprovement();
+						
+						if (imp != 0){
+							System.out.println(man.toString());
+							// = = = PRINT IMPROVEMENT
+							//System.out.println(g+"\t\t["+imp+"%]");
+							sum += imp;
+							count++;
+						} else {
+							// = = = PRINT IF FAILED
+							//System.out.println(g+"\t\tFAILED!!!");
+							fail_count++;
+						}
 					}
 					
 				}
@@ -128,18 +129,13 @@ public class Evaluation {
 			br.close();
 			
 		} catch (IOException e){
-			
+			e.printStackTrace();
 		}
 		
-		System.out.println("- - - - - - - - - - - - - - - - - -");
+		System.out.println("- - - - - - - - - - - - - - - - - - - - - -");
 		System.out.println("Average amelioration: "+(sum/(double)count)+"%");
 		System.out.println("Failed: "+(((double)fail_count/((double)count+(double)fail_count))*100.0)+"%");
-		/*
-		g = new Generator("METEO_TOMORROW",inFile);
-		System.out.println(g);
-		g = new Generator("METEO_TOMORROW_NIGHT",inFile);
-		System.out.println(g);
-		*/
+
 	}
 
 }
