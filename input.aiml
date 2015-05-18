@@ -1,0 +1,11 @@
+<category><pattern>what does it eat</pattern><template><srai>GENERAL</srai></template></category>
+<category><pattern>what does it do</pattern><template><srai>GENERAL</srai></template></category>
+<category><pattern>what does he do</pattern><template><srai>GENERAL</srai></template></category>
+
+<category><pattern>weather tomorrow</pattern><template><srai>WEATHER</srai></template></category>
+<category><pattern>weather tomorrow evening</pattern><template><srai>WEATHER</srai></template></category>
+<category><pattern>weather tomorrow morning</pattern><template><srai>WEATHER</srai></template></category>
+<category><pattern>weather tomorrow morning in *</pattern><template><srai>WEATHER <star/></srai></template></category>
+<category><pattern>what weather tomorrow</pattern><template><srai>WEATHER</srai></template></category>
+<category><pattern>what weather tomorrow in *</pattern><template><srai>WEATHER <star/></srai></template></category>
+
