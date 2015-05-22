@@ -36,6 +36,45 @@ public class Dbnary {
     //public static final String DB_PATH = "data" + File.separatorChar + "dbnary" + File.separatorChar + "dbnarutdb_fr_en";
     public static final String ONTOLOGY_PROPERTIES = "data" + File.separatorChar + "ontology.properties";
 	
+    
+    public String getPOS(String arg) throws IOException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, ClassNotFoundException, NoSuchVocableException {
+		
+        Store vts = new JenaRemoteSPARQLStore("http://kaiko.getalp.org/sparql");      
+        StoreHandler.registerStoreInstance(vts);
+
+        OntologyModel model = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
+        
+        // Creating DBNary wrapper
+        DBNary dbnary = (DBNary) LexicalResourceFactory.getLexicalResource(DBNary.class, model,language );
+        
+        Vocable v = dbnary.getVocable(arg);
+
+        	
+    	List<LexicalEntry> entries = dbnary.getLexicalEntries(v);
+    	
+    	String pos = "xxxx";
+    	for(LexicalEntry le: entries){
+    		/*
+    		List<LexicalResourceEntity> related = dbnary.getRelatedEntities(le, DBNaryRelationType.synonym);
+    		
+    		for(LexicalResourceEntity lent: related){
+    			logger.info("\t\tSYN: "+lent.toString());
+    		}*/
+    		String pos_prefix = "http://www.lexinfo.net/ontology/2.0/lexinfo#";
+    		
+    		//System.out.println(le);
+    		if (le.getPartOfSpeech().length() > pos_prefix.length()){
+    			pos = le.getPartOfSpeech().substring(pos_prefix.length());
+    			if (pos.equals("verb")){
+    				return "verb";
+    			}
+    		}
+    		//System.out.println(pos);
+    	}
+
+    	return pos;
+    }
+    
     public ArrayList<String> getSyn(String arg) throws IOException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, ClassNotFoundException, NoSuchVocableException {
 				
 		ArrayList<String> res = new ArrayList<>();
@@ -70,7 +109,7 @@ public class Dbnary {
         		
         		//logger.info("\t"+le.toString());
         		for(LexicalResourceEntity lent: related){
-        			//logger.info("\t\tSYN: "+lent.toString());
+        			logger.info("\t\tSYN: "+lent.toString());
         			res.add(lent.toString().substring(20,lent.toString().length()-1));
         		}
         	}

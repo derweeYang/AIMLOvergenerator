@@ -1,11 +1,44 @@
-<category><pattern>what does it eat</pattern><template><srai>GENERAL</srai></template></category>
-<category><pattern>what does it do</pattern><template><srai>GENERAL</srai></template></category>
-<category><pattern>what does he do</pattern><template><srai>GENERAL</srai></template></category>
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
 
-<category><pattern>weather tomorrow</pattern><template><srai>WEATHER</srai></template></category>
-<category><pattern>weather tomorrow evening</pattern><template><srai>WEATHER</srai></template></category>
-<category><pattern>weather tomorrow morning</pattern><template><srai>WEATHER</srai></template></category>
-<category><pattern>weather tomorrow morning in *</pattern><template><srai>WEATHER <star/></srai></template></category>
-<category><pattern>what weather tomorrow</pattern><template><srai>WEATHER</srai></template></category>
-<category><pattern>what weather tomorrow in *</pattern><template><srai>WEATHER <star/></srai></template></category>
+<category><pattern>a b c d</pattern><template><srai>GENERAL</srai></template></category>
+<category><pattern>a b c z</pattern><template><srai>GENERAL</srai></template></category>
+<category><pattern>a x c d</pattern><template><srai>GENERAL</srai></template></category>
+<category><pattern>a x c z</pattern><template><srai>GENERAL</srai></template></category>
+<category><pattern>a 1 b c d</pattern><template><srai>GENERAL</srai></template></category>
+<category><pattern>a 1 b c z</pattern><template><srai>GENERAL</srai></template></category>
+<category><pattern>a 1 x c d</pattern><template><srai>GENERAL</srai></template></category>
+<category><pattern>a 1 x c z</pattern><template><srai>GENERAL</srai></template></category>
 
+
+
+<category>
+<pattern>WEATHER_ANSWER</pattern>
+<template>It's going to be sunny</template>
+</category>
+
+<category>
+<pattern>WEATHER_ANSWER *</pattern>
+<template>It's going to be sunny in <star/></template>
+</category>
+
+<category><pattern>weather tomorrow</pattern><template><srai>WEATHER_ANSWER</srai></template></category>
+<category><pattern>weather tomorrow</pattern><template><srai>WEATHER_ANSWER</srai></template></category>
+<category><pattern>weather tomorrow</pattern><template><srai>WEATHER_ANSWER</srai></template></category>
+<category><pattern>weather tomorrow in *</pattern><template><srai>WEATHER_ANSWER <star/></srai></template></category>
+<category><pattern>what weather tomorrow</pattern><template><srai>WEATHER_ANSWER</srai></template></category>
+<category><pattern>what weather tomorrow in *</pattern><template><srai>WEATHER_ANSWER <star/></srai></template></category>
+
+<category><pattern>weather tomorrow in *</pattern><template><srai>WEATHER_ANSWER <star/></srai></template></category>
+<category><pattern>weather tomorrow evening in *</pattern><template><srai>WEATHER_ANSWER <star/></srai></template></category>
+<category><pattern>weather tomorrow morning</pattern><template><srai>WEATHER_ANSWER <star/></srai></template></category>
+
+
+
+<category><pattern>comment trouver les verbes dans la phrase</pattern><template><srai>FRENCH <star/></srai></template></category>
+<category><pattern>il falloir faire infinitif</pattern><template><srai>FRENCH <star/></srai></template></category>
+<category><pattern>le verbe est conjugué au présent</pattern><template><srai>FRENCH <star/></srai></template></category>
+<category><pattern>il mangera ça</pattern><template><srai>FRENCH <star/></srai></template></category>
+
+
+</aiml>

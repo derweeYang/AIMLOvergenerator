@@ -4,21 +4,27 @@ import fc.Manager;
 
 
 /**
- * Example of workflow
  * @author Laurent Fite
  *
  */
-public class SimpleTest {
+public class Overgenerator {
 
 	public static Manager m;
 	
 	public static void main(String[] args) {
 
-		//g = new Generator("ASK_FOR_WHO_ARE_ALIENS","/home/getalp/fite/Documents/Corpus_ASR_Jason/Game_earth_defender/asr_infos_game.aiml");
+		// TODO choose destination OUTFILE
 		
-		String pattern = "WEATHER_ANSWER";
+		String pattern = args[0];
+		String file = args[1];
+		String outfile;
+		if (args.length == 3)
+			outfile = args[2];
+		else
+			outfile = file.split(".")[0]+"_out.aiml";
+		
 		// Create a new manager for this file and this template
-		m = new Manager(pattern,"input.aiml","aiml_out/"+pattern+"_out.aiml");
+		m = new Manager(pattern,file,outfile);
 		
 		// Apply a rule on the tree
 		//m.applyRule("clone climate from weather");
@@ -29,7 +35,7 @@ public class SimpleTest {
 		
 		// Display the result and the tree
 		System.out.println(m);
-		System.out.println(m.getView());
+		//System.out.println(m.getView());
 		System.out.println(m.getSimplifiedView());
 
 		

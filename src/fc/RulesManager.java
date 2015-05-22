@@ -7,22 +7,21 @@ import java.util.ArrayList;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 
 /**
- * A Generator is linked to a certain Tree via the root Node
- * It can be called to apply rules to the tree it is linked to.
+ * A RulesManager takes a tree and applies a given rule.
+ * It can generate synonyms for all words or some of them
  * 
  * @author Laurent Fite
  *
  */
 public class RulesManager {
-
-	/**
-	 * The tree it is linked to. All rules will apply to this tree
-	 */
-	//Node root;
 	
 	public RulesManager(Node n){
-		//this.root = n;
+		
 	}
+	
+	// ADD BEFORE
+	// ADD AFTER
+	// REMOVE IF
 	
 	/**
 	 * Add a Node where another node that matches a condition is
@@ -58,8 +57,6 @@ public class RulesManager {
 			Node clone = new Node(n.getSon(cond));
 			clone.setValue(toAdd);
 			n.addSon(clone);
-			
-			
 		}
 		for (Node s: n.getSons()){
 			this.cloneFrom(s, toAdd, cond);
@@ -114,7 +111,6 @@ public class RulesManager {
 			this.applySynonyms(s);
 		}
 		
-		
 		try {
 			if (!root.getValue().equals("ROOT")){
 				//System.out.println("Synonyms for: "+root.toString()+" "+root.getValue());
@@ -128,8 +124,8 @@ public class RulesManager {
 		} catch (IllegalAccessException | InvocationTargetException
 				| InstantiationException | NoSuchMethodException
 				| ClassNotFoundException | NoSuchVocableException | IOException e) {
-			e.getStackTrace();
-			//System.out.println("Error, I guess "+root.getValue()+" isn't a vocable.");
+			//e.getStackTrace();
+			System.out.println("[RulesManager:126] "+e.getMessage());
 			//errors++;
 		};
 		

@@ -12,8 +12,23 @@ public class Node {
 	
 	//ArrayList<String> solutions;
 	
+	/**
+	 * The word
+	 */
 	private String value;
+	/**
+	 * Part-of-speech (verb/noun/...
+	 * Can be obtained with DBnary (kind of)
+	 */
+	private String pos;
+	
+	/**
+	 * Synonyms and other words used at the same place
+	 */
 	private ArrayList<String> otherValues;
+	/**
+	 * All the words that can follow this word
+	 */
 	private ArrayList<Node> sons;
 	
 	/**
@@ -28,6 +43,10 @@ public class Node {
 	 * Is the node in the process of being deleted?
 	 */
 	private boolean toBeDeleted = false;
+	
+	
+	
+	/* ************************************************************* */
 	
 	/**
 	 * Default constructor
@@ -60,7 +79,9 @@ public class Node {
 		for (Node i: c.sons){
 			this.sons.add(new Node(i));
 		}
+		
 		this.endsPattern = c.endsPattern;
+		this.pos = c.pos;
 	}
 	
 	/* ************************************************************* */
@@ -110,7 +131,7 @@ public class Node {
 	 * @return True if there is only one son with the value given as parameter
 	 */
 	public boolean hasOnlySon(Node n){
-		return this.hasSon(n.value) && this.sons.size() == 1;
+		return this.hasOnlySon(n.value);
 	}
 	
 	/**
@@ -131,7 +152,6 @@ public class Node {
 	 */
 	public Node getSon(String c){
 		for (Node s: this.sons){
-			//System.out.println(s.value+" =? "+n.value);
 			if (s.value.equals(c)){
 				return s;
 			}
@@ -149,14 +169,17 @@ public class Node {
 	 * 		word will be added one after the other
 	 */
 	public void addSentence(String s){
-		String[] parts = s.split(" ");
+		// First split the sentence into words
+		String[] words = s.split(" ");
 		
 		Node current = this;
 		
-		for (String w: parts){			
+		// For every word...
+		for (String w: words){
+			// create a new Node
 			Node toInsert = new Node(w);
-
 			
+			// and insert it
 			if(!current.hasSon(toInsert)){
 				current.sons.add(toInsert); // Add in array list
 				current = toInsert; // Next node to add in will be this one
@@ -398,6 +421,14 @@ public class Node {
 	/* ************************************************************* */
 	/* GETTERS AND SETTERS */
 	
+	public String getPos() {
+		return pos;
+	}
+
+	public void setPos(String pos) {
+		this.pos = pos;
+	}
+	
 	/**
 	 * Get sons of this Node
 	 * @return An ArrayList of Nodes (the sons)
@@ -436,20 +467,7 @@ public class Node {
 	 * Displays the node (all the different values, if the node is optional or terminal)
 	 */
 	public String toString(){
-		
-		String toReturn = "";
-		
-		if (this.optional) toReturn += "(";
-		toReturn += value;
-		
-		for (String s: this.otherValues)
-			toReturn += "|"+s;
-		
-		if (this.optional) toReturn += ")?";
-		if (this.endsPattern) toReturn += ".";
-
-		return toReturn;
-		
+		return value;
 	}
 
 	/**
@@ -463,7 +481,10 @@ public class Node {
 		String toReturn = "";
 		
 		if (this.optional) toReturn += "(";
+
 		toReturn += value;
+		if (pos != null)
+			toReturn += " ["+pos+"]";
 		
 		for (String s: this.otherValues)
 			toReturn += "|"+s;
@@ -516,10 +537,4 @@ public class Node {
 		
 		return toReturn;
 	}
-	
-
-
-	
-
-	
 }

@@ -29,7 +29,7 @@ public class Evaluation {
 			while ((f = br.readLine()) != null) {
 				// f is an aiml file
 				
-				//			System.out.println(f);
+				//System.out.println(f);
 				
 				// read it
 				BufferedReader aimlfile = new BufferedReader(new FileReader(f));
@@ -60,64 +60,32 @@ public class Evaluation {
 				//System.out.println(srai);
 				
 				// = = = PRINT FILE
-				System.out.println("\n"+f);
+				//System.out.println("\n"+f);
 
 				// =====================================================
 				// =====================================================
 				boolean thread = false;
 				for (String template : srai) {
+					man = new Manager(template,f);
 					
-					if (thread){
-						final String temp = template;
-						final String file = f;
-						new Thread(){
-							public void run(){
-								
-								Manager m = new Manager(temp,file);
-								
-								// APPLY SYNONYMS WITH DBNARY?
-								//man.applySyn();
-								
-								m.generateFile();
-								
-								double imp = m.getImprovement();
-								
-								if (imp != 0){
-									System.out.println(m.toCSV());
-									// = = = PRINT IMPROVEMENT
-									//System.out.println(g+"\t\t["+imp+"%]");
-									//sum += imp;
-									//count++;
-								} else {
-									// = = = PRINT IF FAILED
-									//System.out.println(g+"\t\tFAILED!!!");
-									//fail_count++;
-								}
-							}
-						}.start();
+					// APPLY SYNONYMS WITH DBNARY?
+					//man.applySyn();
+					
+					man.generateFile();
+					
+					double imp = man.getImprovement();
+					
+					if (imp != 0){
+						System.out.println(man.toCSV());
+						// = = = PRINT IMPROVEMENT
+						//System.out.println(g+"\t\t["+imp+"%]");
+						sum += imp;
+						count++;
 					} else {
-						man = new Manager(template,f);
-						
-						// APPLY SYNONYMS WITH DBNARY?
-						//man.applySyn();
-						
-						man.generateFile();
-						
-						double imp = man.getImprovement();
-						
-						if (imp != 0){
-							System.out.println(man.toString());
-							// = = = PRINT IMPROVEMENT
-							//System.out.println(g+"\t\t["+imp+"%]");
-							sum += imp;
-							count++;
-						} else {
-							// = = = PRINT IF FAILED
-							//System.out.println(g+"\t\tFAILED!!!");
-							fail_count++;
-						}
+						// = = = PRINT IF FAILED
+						//System.out.println(g+"\t\tFAILED!!!");
+						fail_count++;
 					}
-					
 				}
 				// =====================================================
 				// =====================================================

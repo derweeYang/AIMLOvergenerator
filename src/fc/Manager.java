@@ -1,5 +1,9 @@
 package fc;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+
+import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 
 /**
  * A Manager is a class that wraps all the others.
@@ -46,13 +50,13 @@ public class Manager {
 	 * @param inFile
 	 * 		input AIML file
 	 */
-	public Manager(String template, String inFile) {
+	public Manager(String template, String inFile, String outFile) {
 		
 		this.template = template;
 		this.solutions = new ArrayList<String>();
 		
 		this.inFile = inFile;
-		this.outFile = "aiml_out/"+template+"_out.aiml";
+		this.outFile = outFile;//"aiml_out/"+template+"_out.aiml";
 		
 		/* ************************* */
 		// Create a new tree
@@ -65,6 +69,9 @@ public class Manager {
 		
 		// 1. Read the AIML file
 		nbRulesIn = parser.parseAIML(inFile, template, root);
+	}
+	public Manager(String template, String inFile){
+		this(template,inFile,"aiml_out/"+template+"_out.aiml");
 	}
 	
 	/**
@@ -80,6 +87,27 @@ public class Manager {
 	 */
 	public void applySyn(){
 		rulesManager.applySynonyms(root);
+	}
+	
+	public void fetchPosInfo(Node r){
+		
+		Dbnary db = new Dbnary();
+		
+		for (Node s: r.getSons()){
+			this.fetchPosInfo(s);
+		}
+		
+		try {
+			if (!r.getValue().equals("ROOT")){
+				String pos = db.getPOS(r.getValue().toLowerCase());
+				r.setPos(pos);
+			}
+		} catch (IllegalAccessException | InvocationTargetException
+				| InstantiationException | NoSuchMethodException
+				| ClassNotFoundException | NoSuchVocableException | IOException e) {
+			//e.printStackTrace();
+			System.out.println("Error: " +e.getMessage());
+		};
 	}
 	
 	/**
@@ -172,14 +200,29 @@ public class Manager {
 	/* * * * * * */
 	// STATS
 	
-	public float avgNbWords(){
+	public float[] getInfoNbWords(){
 		int i = 0;
 		for(String s : solutions){
 			String[] parts = s.split("}");
 			i += parts.length;
 		}
-		return (float)i/(float)solutions.size();
+		float sum = (float)i;
+		float n = (float)solutions.size();
+		
+		float avg = sum/n;
+		float var = 0;
+		for(String s : solutions){
+			String[] parts = s.split("}");
+			var += Math.pow((float)parts.length - avg,2);
+		//	System.out.println("="+var);
+		}
+		var = (float) Math.sqrt(Math.abs(var/n));
+		if (var < 0.01) var = 0;
+		
+		float[] myArray = {avg, var};
+		return (myArray);
 	}
+	
 	
 	public double getImprovement(){
 		if (nbRulesIn > 0)
@@ -197,7 +240,10 @@ public class Manager {
 	}
 	
 	public String toCSV(){
-		return ""+nbRulesIn+","+avgNbWords()+","+nbRulesOut+","+this.getImprovement();
+		return ""+nbRulesIn+","+getInfoNbWords()[0]+","+getInfoNbWords()[1]+","+nbRulesOut+","+this.getImprovement();
+	}
+	public String toLatex(){
+		return this.template+" & "+nbRulesIn+" & "+nbRulesOut+" & "+this.getImprovement();//+" \\\\";
 	}
 
 

@@ -6,6 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,6 +31,11 @@ public class Parser {
 	 * Sentences generated from the tree
 	 */
 	ArrayList<String> solutions;
+	
+	/**
+	 * The category for the bot answer
+	 */
+	String botanswer;
 	
 	/**
 	 * @param solutions
@@ -105,20 +113,38 @@ public class Parser {
 			String p_findTemplate = "<srai>"+template+"( <star.*>)?</srai>";
 			String p_findPattern = "<pattern>(.*)</pattern>";
 			String p_findStarIndex = "<star.*/>";
+			
+			String p_findBotAnswer = "(?s)<category>\\s(.*)<pattern>.*</pattern>\\s(.*?)</category>";
 
 		    // Create a Pattern object
 		    Pattern r_findTemplate = Pattern.compile(p_findTemplate);
 		    Pattern r_findPattern = Pattern.compile(p_findPattern);
 			Pattern r_findStarIndex = Pattern.compile(p_findStarIndex);
+			Pattern r_findBotAnswer = Pattern.compile(p_findBotAnswer);
 
 		    Matcher m_findTemplate = null;
 		    Matcher m_findPattern = null;
 		    Matcher m_findStarIndex = null;
+		    Matcher m_findBotAnswer = null;
 		    
+		    byte[] encoded = Files.readAllBytes(Paths.get(AIMLFile));
+		    String stuff = new String(encoded, Charset.defaultCharset());
+		    
+		    //System.out.println(stuff);
+		    
+		    m_findBotAnswer = r_findBotAnswer.matcher(stuff);
+			
+		    while (m_findBotAnswer.find()){
+		    	botanswer = m_findBotAnswer.group(0);
+			}
+			
 		    int starIndex = 0;
 			
 			// Read file line by line
 			while ((line = br.readLine()) != null) {
+				
+				
+				
 				m_findTemplate = r_findTemplate.matcher(line);
 								
 				// Find lines where <srai>TEMPLATE</srai>
@@ -200,9 +226,13 @@ public class Parser {
 			
 			// Classic Java stuff
 			writer = new PrintWriter(fileName, "UTF-8");
+			writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<aiml version=\"1.0\">\n");
+			writer.println(botanswer+"\n");
 			for (String l : aiml) {
 				writer.println(l);
 			}
+			writer.println("</aiml>");
+
 			writer.close();
 			
 			return aiml.size();
