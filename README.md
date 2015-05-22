@@ -1,5 +1,5 @@
-# AIMLSurgenerator
-Surgenerate your AIML rules.
+# AIMLOvergenerator
+Overgenerate your AIML rules.
 
 AIML (Artificial Intelligence Markup Language) is an XML dialect for creating natural language software agents.
 It is commonly used for chatterbots.
