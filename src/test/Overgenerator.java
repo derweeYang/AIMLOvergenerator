@@ -12,12 +12,11 @@ public class Overgenerator {
 	public static Manager m;
 	
 	public static void main(String[] args) {
-
-		// TODO choose destination OUTFILE
-		
+	
 		String pattern = args[0];
 		String file = args[1];
 		String outfile;
+		
 		if (args.length == 3)
 			outfile = args[2];
 		else

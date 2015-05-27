@@ -18,7 +18,7 @@ public class SimpleTest {
 		
 		String pattern = "WEATHER_ANSWER";
 		// Create a new manager for this file and this template
-		m = new Manager(pattern,"input.aiml","aiml_out/"+pattern+"_out.aiml");
+		m = new Manager(pattern, "input.aiml", "aiml_out/"+pattern+"_out.aiml");
 		
 		// Apply a rule on the tree
 		//m.applyRule("clone climate from weather");
